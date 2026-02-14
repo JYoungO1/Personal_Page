@@ -284,6 +284,7 @@ var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
 var MAP_SUBJECT_SCALE = 1.12;
 var MAP_SUBJECT_SHIFT_X = 22;
+var MAP_SUBJECT_SHIFT_Y = -80;
 var MAP_ALPHA_THRESHOLD = 20;
 
 ww = window.innerWidth, wh = window.innerHeight;
@@ -346,7 +347,7 @@ var getImageData = function (image) {
 		drawHeight *= safeScale;
 	}
 	var offsetX = (MAP_WIDTH - drawWidth) / 2 + MAP_SUBJECT_SHIFT_X;
-	var offsetY = MAP_HEIGHT - drawHeight;
+	var offsetY = MAP_HEIGHT - drawHeight + MAP_SUBJECT_SHIFT_Y;
 	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
 	ctx.drawImage(sourceCanvas, cropX, cropY, cropWidth, cropHeight, offsetX, offsetY, drawWidth, drawHeight);
 
