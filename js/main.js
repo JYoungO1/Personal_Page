@@ -282,8 +282,8 @@ var PARTICLE_ZOOM = 2.0;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
-var MAP_SUBJECT_SCALE = 1.12;
-var MAP_SUBJECT_SHIFT_X = -30;
+var MAP_SUBJECT_SCALE = 1.06;
+var MAP_SUBJECT_SHIFT_X = -50;
 var MAP_SUBJECT_SHIFT_Y = -80;
 var MAP_ALPHA_THRESHOLD = 20;
 
@@ -346,7 +346,7 @@ var getImageData = function (image) {
 		drawWidth *= safeScale;
 		drawHeight *= safeScale;
 	}
-	var offsetX = (MAP_WIDTH - drawWidth) / 2 + MAP_SUBJECT_SHIFT_X;
+	var offsetX = (MAP_WIDTH - drawWidth) / 2;
 	var offsetY = MAP_HEIGHT - drawHeight + MAP_SUBJECT_SHIFT_Y;
 	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
 	ctx.drawImage(sourceCanvas, cropX, cropY, cropWidth, cropHeight, offsetX, offsetY, drawWidth, drawHeight);
@@ -375,7 +375,7 @@ var drawTheMap = function () {
 			if (imagedata.data[x * 4 + y * 4 * imagedata.width + 3] > MAP_ALPHA_THRESHOLD) {
 
 				var vertex = new THREE.Vector3();
-				vertex.x = x - MAP_WIDTH / 2 + MAP_OFFSET_X;
+				vertex.x = x - MAP_WIDTH / 2 + MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
 				vertex.y = -y + MAP_HEIGHT / 2;
 				vertex.z = -Math.random() * 500;
 
