@@ -278,6 +278,9 @@ var Stars = {
 };
 var renderer, scene, camera, ww, wh, particles;
 var initStarted = false;
+var MAP_WIDTH = 440;
+var MAP_HEIGHT = 660;
+var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
@@ -289,13 +292,19 @@ isMouseDown = false;
 var getImageData = function (image) {
 
 	var canvas = document.createElement("canvas");
-	canvas.width = image.width;
-	canvas.height = image.height;
+	canvas.width = MAP_WIDTH;
+	canvas.height = MAP_HEIGHT;
 
 	var ctx = canvas.getContext("2d");
-	ctx.drawImage(image, 0, 0);
+	var scale = Math.min(MAP_WIDTH / image.width, MAP_HEIGHT / image.height);
+	var drawWidth = image.width * scale;
+	var drawHeight = image.height * scale;
+	var offsetX = (MAP_WIDTH - drawWidth) / 2;
+	var offsetY = (MAP_HEIGHT - drawHeight) / 2;
+	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+	ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-	return ctx.getImageData(0, 0, image.width, image.height);
+	return ctx.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 };
 
 function getPixel(imagedata, x, y) {
@@ -319,8 +328,8 @@ var drawTheMap = function () {
 			if (imagedata.data[x * 4 + y * 4 * imagedata.width] > 0) {
 
 				var vertex = new THREE.Vector3();
-				vertex.x = x - imagedata.width / 2 + (500 - 440 * .5);
-				vertex.y = -y + imagedata.height / 2;
+				vertex.x = x - MAP_WIDTH / 2 + MAP_OFFSET_X;
+				vertex.y = -y + MAP_HEIGHT / 2;
 				vertex.z = -Math.random() * 500;
 
 				vertex.speed = Math.random() / speed + 0.015;
