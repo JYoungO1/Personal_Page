@@ -280,6 +280,8 @@ var renderer, scene, camera, ww, wh, particles;
 var initStarted = false;
 var PARTICLE_ZOOM = 2.0;
 var MOBILE_PARTICLE_ZOOM = 1.0;
+var PARTICLE_OPACITY = 1.0;
+var MOBILE_PARTICLE_OPACITY = 0.72;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
@@ -376,12 +378,14 @@ var drawTheMap = function () {
 
 	var positions = [];
 	var colors = [];
+	var particleOpacity = isMobileDevice() ? MOBILE_PARTICLE_OPACITY : PARTICLE_OPACITY;
 	var pointOffsetX = isMobileDevice() ? MOBILE_MAP_OFFSET_X : MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
 	var geometry = new THREE.BufferGeometry();
 	var material = new THREE.PointsMaterial({
 		size: 1,
 		vertexColors: true,
-		transparent: true
+		transparent: true,
+		opacity: particleOpacity
 	});
 	for (var y = 0, y2 = imagedata.height; y < y2; y += 1) {
 		for (var x = 0, x2 = imagedata.width; x < x2; x += 1) {
