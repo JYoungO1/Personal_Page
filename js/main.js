@@ -278,6 +278,7 @@ var Stars = {
 };
 var renderer, scene, camera, ww, wh, particles;
 var initStarted = false;
+var PARTICLE_ZOOM = 2.0;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
@@ -415,7 +416,7 @@ var init = function () {
 	camera.position.set(0, -20, 4);
 	camera.lookAt(centerVector);
 	scene.add(camera);
-	camera.zoom = 1;
+	camera.zoom = PARTICLE_ZOOM;
 	camera.updateProjectionMatrix();
 
 	imagedata = getImageData(image);
