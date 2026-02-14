@@ -282,9 +282,9 @@ var PARTICLE_ZOOM = 2.0;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
-var MAP_SUBJECT_SCALE = 0.8;
+var MAP_SUBJECT_SCALE = 0.9;
 var MAP_SUBJECT_SHIFT_X = -80;
-var MAP_SUBJECT_SHIFT_Y = -90;
+var MAP_SUBJECT_SHIFT_Y = -60;
 var MAP_ALPHA_THRESHOLD = 20;
 
 ww = window.innerWidth, wh = window.innerHeight;
