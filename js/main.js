@@ -279,9 +279,9 @@ var Stars = {
 var renderer, scene, camera, ww, wh, particles;
 var initStarted = false;
 var PARTICLE_ZOOM = 2.0;
-var MOBILE_PARTICLE_ZOOM = 2.0;
+var MOBILE_PARTICLE_ZOOM = 1.0;
 var PARTICLE_OPACITY = 1.0;
-var MOBILE_PARTICLE_OPACITY = 0.72;
+var MOBILE_PARTICLE_OPACITY = 1.0;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
