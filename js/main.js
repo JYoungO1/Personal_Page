@@ -279,12 +279,16 @@ var Stars = {
 var renderer, scene, camera, ww, wh, particles;
 var initStarted = false;
 var PARTICLE_ZOOM = 2.0;
+var MOBILE_PARTICLE_ZOOM = 1.0;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
 var MAP_SUBJECT_SCALE = 0.85;
 var MAP_SUBJECT_SHIFT_X = -100;
-var MAP_SUBJECT_SHIFT_Y = -140;
+var MAP_SUBJECT_SHIFT_Y = -120;
+var MOBILE_MAP_OFFSET_X = 0;
+var MOBILE_SUBJECT_SCALE = 0.9;
+var MOBILE_SUBJECT_SHIFT_Y = -30;
 var MAP_ALPHA_THRESHOLD = 20;
 
 ww = window.innerWidth, wh = window.innerHeight;
@@ -293,6 +297,10 @@ var centerVector = new THREE.Vector3(0, 0, 0);
 var previousTime = 0;
 speed = 10;
 isMouseDown = false;
+
+function isMobileDevice() {
+	return typeof md !== 'undefined' && md.mobile();
+}
 
 var getImageData = function (image) {
 
@@ -337,17 +345,21 @@ var getImageData = function (image) {
 	canvas.width = MAP_WIDTH;
 	canvas.height = MAP_HEIGHT;
 
+	var mobile = isMobileDevice();
+	var subjectScale = mobile ? MOBILE_SUBJECT_SCALE : MAP_SUBJECT_SCALE;
+	var subjectShiftY = mobile ? MOBILE_SUBJECT_SHIFT_Y : MAP_SUBJECT_SHIFT_Y;
+
 	var ctx = canvas.getContext("2d");
 	var fitScale = Math.min(MAP_WIDTH / cropWidth, MAP_HEIGHT / cropHeight);
-	var drawWidth = cropWidth * fitScale * MAP_SUBJECT_SCALE;
-	var drawHeight = cropHeight * fitScale * MAP_SUBJECT_SCALE;
+	var drawWidth = cropWidth * fitScale * subjectScale;
+	var drawHeight = cropHeight * fitScale * subjectScale;
 	if (drawWidth > MAP_WIDTH || drawHeight > MAP_HEIGHT) {
 		var safeScale = Math.min(MAP_WIDTH / drawWidth, MAP_HEIGHT / drawHeight);
 		drawWidth *= safeScale;
 		drawHeight *= safeScale;
 	}
 	var offsetX = (MAP_WIDTH - drawWidth) / 2;
-	var offsetY = MAP_HEIGHT - drawHeight + MAP_SUBJECT_SHIFT_Y;
+	var offsetY = MAP_HEIGHT - drawHeight + subjectShiftY;
 	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
 	ctx.drawImage(sourceCanvas, cropX, cropY, cropWidth, cropHeight, offsetX, offsetY, drawWidth, drawHeight);
 
@@ -364,6 +376,7 @@ var drawTheMap = function () {
 
 	var positions = [];
 	var colors = [];
+	var pointOffsetX = isMobileDevice() ? MOBILE_MAP_OFFSET_X : MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
 	var geometry = new THREE.BufferGeometry();
 	var material = new THREE.PointsMaterial({
 		size: 1,
@@ -375,7 +388,7 @@ var drawTheMap = function () {
 			if (imagedata.data[x * 4 + y * 4 * imagedata.width + 3] > MAP_ALPHA_THRESHOLD) {
 
 				var vertex = new THREE.Vector3();
-				vertex.x = x - MAP_WIDTH / 2 + MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
+				vertex.x = x - MAP_WIDTH / 2 + pointOffsetX;
 				vertex.y = -y + MAP_HEIGHT / 2;
 				vertex.z = -Math.random() * 500;
 
@@ -417,7 +430,7 @@ var init = function () {
 	camera.position.set(0, -20, 4);
 	camera.lookAt(centerVector);
 	scene.add(camera);
-	camera.zoom = PARTICLE_ZOOM;
+	camera.zoom = isMobileDevice() ? MOBILE_PARTICLE_ZOOM : PARTICLE_ZOOM;
 	camera.updateProjectionMatrix();
 
 	imagedata = getImageData(image);
@@ -436,6 +449,7 @@ var onResize = function () {
 	camera.right = ww / 2;
 	camera.top = wh / 2;
 	camera.bottom = wh / -2;
+	camera.zoom = isMobileDevice() ? MOBILE_PARTICLE_ZOOM : PARTICLE_ZOOM;
 	camera.updateProjectionMatrix();
 };
 
