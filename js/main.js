@@ -281,6 +281,7 @@ var initStarted = false;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
+var MAP_SUBJECT_SCALE = 0.72;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
@@ -296,7 +297,7 @@ var getImageData = function (image) {
 	canvas.height = MAP_HEIGHT;
 
 	var ctx = canvas.getContext("2d");
-	var scale = Math.min(MAP_WIDTH / image.width, MAP_HEIGHT / image.height);
+	var scale = Math.min(MAP_WIDTH / image.width, MAP_HEIGHT / image.height) * MAP_SUBJECT_SCALE;
 	var drawWidth = image.width * scale;
 	var drawHeight = image.height * scale;
 	var offsetX = (MAP_WIDTH - drawWidth) / 2;
@@ -325,7 +326,7 @@ var drawTheMap = function () {
 	});
 	for (var y = 0, y2 = imagedata.height; y < y2; y += 1) {
 		for (var x = 0, x2 = imagedata.width; x < x2; x += 1) {
-			if (imagedata.data[x * 4 + y * 4 * imagedata.width] > 0) {
+			if (imagedata.data[x * 4 + y * 4 * imagedata.width + 3] > 0) {
 
 				var vertex = new THREE.Vector3();
 				vertex.x = x - MAP_WIDTH / 2 + MAP_OFFSET_X;
