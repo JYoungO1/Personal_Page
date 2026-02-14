@@ -281,7 +281,8 @@ var initStarted = false;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
-var MAP_SUBJECT_SCALE = 1.0;
+var MAP_SUBJECT_SCALE = 1.08;
+var MAP_SUBJECT_SHIFT_X = 12;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
@@ -334,16 +335,11 @@ var getImageData = function (image) {
 	canvas.height = MAP_HEIGHT;
 
 	var ctx = canvas.getContext("2d");
-	var fitScale = Math.min(MAP_WIDTH / cropWidth, MAP_HEIGHT / cropHeight);
+	var fitScale = Math.max(MAP_WIDTH / cropWidth, MAP_HEIGHT / cropHeight);
 	var drawWidth = cropWidth * fitScale * MAP_SUBJECT_SCALE;
 	var drawHeight = cropHeight * fitScale * MAP_SUBJECT_SCALE;
-	if (drawWidth > MAP_WIDTH || drawHeight > MAP_HEIGHT) {
-		var safeScale = Math.min(MAP_WIDTH / drawWidth, MAP_HEIGHT / drawHeight);
-		drawWidth *= safeScale;
-		drawHeight *= safeScale;
-	}
-	var offsetX = (MAP_WIDTH - drawWidth) / 2;
-	var offsetY = (MAP_HEIGHT - drawHeight) / 2;
+	var offsetX = (MAP_WIDTH - drawWidth) / 2 + MAP_SUBJECT_SHIFT_X;
+	var offsetY = MAP_HEIGHT - drawHeight;
 	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
 	ctx.drawImage(sourceCanvas, cropX, cropY, cropWidth, cropHeight, offsetX, offsetY, drawWidth, drawHeight);
 
