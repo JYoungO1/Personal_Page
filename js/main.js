@@ -281,7 +281,7 @@ var initStarted = false;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
-var MAP_SUBJECT_SCALE = 0.3;
+var MAP_SUBJECT_SCALE = 0.6;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
