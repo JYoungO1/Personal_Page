@@ -281,14 +281,15 @@ var initStarted = false;
 var PARTICLE_ZOOM = 2.0;
 var MOBILE_PARTICLE_ZOOM = 1.0;
 var PARTICLE_OPACITY = 1.0;
-var MOBILE_PARTICLE_OPACITY = 2.0;
+var MOBILE_PARTICLE_OPACITY = 0.62;
+var MOBILE_POINT_SIZE = 1.35;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
 var MAP_SUBJECT_SCALE = 0.85;
 var MAP_SUBJECT_SHIFT_X = -100;
 var MAP_SUBJECT_SHIFT_Y = -110;
-var MOBILE_MAP_OFFSET_X = 80;
+var MOBILE_MAP_OFFSET_X = 64;
 var MOBILE_SUBJECT_SCALE = 0.78;
 var MOBILE_SUBJECT_SHIFT_Y = -30;
 var MAP_ALPHA_THRESHOLD = 20;
@@ -378,11 +379,13 @@ var drawTheMap = function () {
 
 	var positions = [];
 	var colors = [];
-	var particleOpacity = isMobileDevice() ? MOBILE_PARTICLE_OPACITY : PARTICLE_OPACITY;
-	var pointOffsetX = isMobileDevice() ? MOBILE_MAP_OFFSET_X : MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
+	var mobile = isMobileDevice();
+	var particleOpacity = mobile ? MOBILE_PARTICLE_OPACITY : PARTICLE_OPACITY;
+	var pointOffsetX = mobile ? MOBILE_MAP_OFFSET_X : MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
+	var pointSize = mobile ? MOBILE_POINT_SIZE : 1;
 	var geometry = new THREE.BufferGeometry();
 	var material = new THREE.PointsMaterial({
-		size: 1,
+		size: pointSize,
 		vertexColors: true,
 		transparent: true,
 		opacity: particleOpacity
