@@ -281,7 +281,7 @@ var initStarted = false;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
-var MAP_SUBJECT_SCALE = 2.0;
+var MAP_SUBJECT_SCALE = 1.0;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
@@ -292,18 +292,60 @@ isMouseDown = false;
 
 var getImageData = function (image) {
 
+	var sourceCanvas = document.createElement("canvas");
+	var sourceWidth = image.naturalWidth || image.width;
+	var sourceHeight = image.naturalHeight || image.height;
+	sourceCanvas.width = sourceWidth;
+	sourceCanvas.height = sourceHeight;
+	var sourceCtx = sourceCanvas.getContext("2d");
+	sourceCtx.clearRect(0, 0, sourceWidth, sourceHeight);
+	sourceCtx.drawImage(image, 0, 0);
+
+	// Trim transparent margins so different PNG paddings do not affect visible size.
+	var sourceImageData = sourceCtx.getImageData(0, 0, sourceWidth, sourceHeight);
+	var sourceData = sourceImageData.data;
+	var minX = sourceWidth;
+	var minY = sourceHeight;
+	var maxX = -1;
+	var maxY = -1;
+	for (var sy = 0; sy < sourceHeight; sy += 1) {
+		for (var sx = 0; sx < sourceWidth; sx += 1) {
+			if (sourceData[(sx + sy * sourceWidth) * 4 + 3] > 0) {
+				if (sx < minX) minX = sx;
+				if (sy < minY) minY = sy;
+				if (sx > maxX) maxX = sx;
+				if (sy > maxY) maxY = sy;
+			}
+		}
+	}
+	var cropX = 0;
+	var cropY = 0;
+	var cropWidth = sourceWidth;
+	var cropHeight = sourceHeight;
+	if (maxX >= minX && maxY >= minY) {
+		cropX = minX;
+		cropY = minY;
+		cropWidth = maxX - minX + 1;
+		cropHeight = maxY - minY + 1;
+	}
+
 	var canvas = document.createElement("canvas");
 	canvas.width = MAP_WIDTH;
 	canvas.height = MAP_HEIGHT;
 
 	var ctx = canvas.getContext("2d");
-	var scale = Math.min(MAP_WIDTH / image.width, MAP_HEIGHT / image.height) * MAP_SUBJECT_SCALE;
-	var drawWidth = image.width * scale;
-	var drawHeight = image.height * scale;
+	var fitScale = Math.min(MAP_WIDTH / cropWidth, MAP_HEIGHT / cropHeight);
+	var drawWidth = cropWidth * fitScale * MAP_SUBJECT_SCALE;
+	var drawHeight = cropHeight * fitScale * MAP_SUBJECT_SCALE;
+	if (drawWidth > MAP_WIDTH || drawHeight > MAP_HEIGHT) {
+		var safeScale = Math.min(MAP_WIDTH / drawWidth, MAP_HEIGHT / drawHeight);
+		drawWidth *= safeScale;
+		drawHeight *= safeScale;
+	}
 	var offsetX = (MAP_WIDTH - drawWidth) / 2;
 	var offsetY = (MAP_HEIGHT - drawHeight) / 2;
 	ctx.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-	ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+	ctx.drawImage(sourceCanvas, cropX, cropY, cropWidth, cropHeight, offsetX, offsetY, drawWidth, drawHeight);
 
 	return ctx.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 };
