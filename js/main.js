@@ -286,8 +286,8 @@ var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
 var MAP_SUBJECT_SCALE = 0.85;
 var MAP_SUBJECT_SHIFT_X = -100;
 var MAP_SUBJECT_SHIFT_Y = -110;
-var MOBILE_MAP_OFFSET_X = 0;
-var MOBILE_SUBJECT_SCALE = 0.9;
+var MOBILE_MAP_OFFSET_X = 16;
+var MOBILE_SUBJECT_SCALE = 0.78;
 var MOBILE_SUBJECT_SHIFT_Y = -30;
 var MAP_ALPHA_THRESHOLD = 20;
 
@@ -732,9 +732,7 @@ function loadProject() {
 		//  CALLBACK
 		Router.listen();
 		Submit.listen('.submit');
-		if (!md.mobile()) {
-			Stars.init();
-		}
+		Stars.init();
 		init();
 		setTimeout(function () {
 			$('#signature').removeClass('loading');
