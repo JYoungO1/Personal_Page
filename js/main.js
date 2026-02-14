@@ -277,6 +277,7 @@ var Stars = {
   }
 };
 var renderer, scene, camera, ww, wh, particles;
+var initStarted = false;
 
 ww = window.innerWidth, wh = window.innerHeight;
 
@@ -340,6 +341,13 @@ var drawTheMap = function () {
 };
 
 var init = function () {
+	if (initStarted) return;
+	if (!image.complete || image.naturalWidth === 0 || image.naturalHeight === 0) {
+		image.addEventListener('load', init, { once: true });
+		return;
+	}
+	initStarted = true;
+
 	renderer = new THREE.WebGLRenderer({
 		canvas: document.getElementById("yahia"),
 		antialias: true,
@@ -649,19 +657,19 @@ $(document).ready(function () {
 });
 
 function loadProject() {
-  Router.route(undefined, function () {
+	Router.route(undefined, function () {
 
-    //  CALLBACK
-    Router.listen();
-    Submit.listen('.submit');
-    if (!md.mobile()) {
-      Stars.init();
-      init();
-    }
-    setTimeout(function () {
-      $('#signature').removeClass('loading');
-    }, Identity.delay * 1.5);
-  });
+		//  CALLBACK
+		Router.listen();
+		Submit.listen('.submit');
+		if (!md.mobile()) {
+			Stars.init();
+		}
+		init();
+		setTimeout(function () {
+			$('#signature').removeClass('loading');
+		}, Identity.delay * 1.5);
+	});
 };
 
 loadProject();
