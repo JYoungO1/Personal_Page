@@ -281,8 +281,7 @@ var initStarted = false;
 var PARTICLE_ZOOM = 2.0;
 var MOBILE_PARTICLE_ZOOM = 1.0;
 var PARTICLE_OPACITY = 1.0;
-var MOBILE_PARTICLE_OPACITY = 0.62;
-var MOBILE_POINT_SIZE = 1.35;
+var MOBILE_PARTICLE_OPACITY = 0.3;
 var MAP_WIDTH = 440;
 var MAP_HEIGHT = 660;
 var MAP_OFFSET_X = 500 - MAP_WIDTH * 0.5;
@@ -382,10 +381,9 @@ var drawTheMap = function () {
 	var mobile = isMobileDevice();
 	var particleOpacity = mobile ? MOBILE_PARTICLE_OPACITY : PARTICLE_OPACITY;
 	var pointOffsetX = mobile ? MOBILE_MAP_OFFSET_X : MAP_OFFSET_X + MAP_SUBJECT_SHIFT_X;
-	var pointSize = mobile ? MOBILE_POINT_SIZE : 1;
 	var geometry = new THREE.BufferGeometry();
 	var material = new THREE.PointsMaterial({
-		size: pointSize,
+		size: 1,
 		vertexColors: true,
 		transparent: true,
 		opacity: particleOpacity
